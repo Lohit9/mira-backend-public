@@ -1,0 +1,17 @@
+service: default
+runtime: custom
+env: flex
+
+# resources
+resources:
+  cpu: 1 
+  memory_gb: 1.6 
+  disk_size_gb: 10 # min is 10gb
+
+manual_scaling:
+  instances: 1
+
+# Config to connect via udp
+# https://cloud.google.com/sql/docs/postgres/connect-app-engine-flexible
+beta_settings:
+  cloud_sql_instances: mira-beta:us-east4:genoa

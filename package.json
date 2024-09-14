@@ -1,0 +1,39 @@
+{
+  "name": "service-default",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "watch": "tsc --noEmit --watch -p ./tsconfig.json",
+    "dev": "NODE_ENV=development bun run --watch ./src/index.ts",
+    "start": "NODE_ENV=production bun run ./src/index.ts",
+    "gcp-build": "prisma generate"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/common-tags": "^1.8.4",
+    "@types/cors": "2.8.17",
+    "@types/dinero.js": "1.9.4",
+    "@types/express": "4.17.21",
+    "@types/lodash": "4.17.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^7.12.0",
+    "@prisma/client": "5.16.1",
+    "@types/luxon": "^3.4.2",
+    "@types/papaparse": "^5.3.14",
+    "common-tags": "^1.8.2",
+    "cors": "2.8.5",
+    "dinero.js": "1.9.1",
+    "express": "4.19.2",
+    "lodash": "4.17.21",
+    "luxon": "^3.4.4",
+    "neverthrow": "6.2.2",
+    "papaparse": "^5.4.1",
+    "prisma": "^5.17.0",
+    "ts-pattern": "5.2.0",
+    "zod": "3.23.8"
+  }
+}

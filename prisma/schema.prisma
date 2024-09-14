@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FulfillmentChannel {
+  FBA
+  FBM
+}
+
+enum Currency {
+  CAD
+  USD
+}
+
+model Order {
+  @@map("orders")
+
+  id String @id
+  sellerId String @map("seller_id")
+  salesChannel String @db.VarChar(50) @map("sales_channel")
+  orderStatus String @db.VarChar(50) @map("order_status")
+  numItemsShipped Int @map("num_items_shipped")
+  isPrime Boolean @map("is_prime")
+  fulfillmentChannel FulfillmentChannel @map("fulfillment_channel")
+  shipServiceLevel String @db.VarChar(50) @map("ship_service_level")
+  orderTotal Int? @map("order_total")
+  orderCurrency Currency? @map("order_currency")
+  shippingAddressCountryCode String? @db.VarChar(5) @map("shipping_addres_country_code")
+  shippingAddressStateOrRegion String? @db.VarChar(100) @map("shipping_address_state_or_region")
+  shippingAddressCity String? @db.VarChar(100) @map("shipping_address_city")
+  purchaseDate DateTime @map("purchase_date")
+  marketplaceId String @db.VarChar(40) @map("marketplace_id")
+}
+
+model SpAPIAccountCredentials {
+  @@map("sp_api_account_credentials")
+
+  sellerId String @id @map("seller_id")
+  longTermRefreshToken String @unique @map("long_term_refresh_token")
+  clientId String @unique @map("client_id")
+  clientSecret String @unique @map("client_secret")
+}
+
+enum ProcessingStatus {
+  DONE
+  CANCELLED
+  FATAL
+  IN_PROGRESS
+  IN_QUEUE
+}
+
+
+model ReportDocuments {
+  @@map("sp_api_report_documents")
+
+  reportDocumentId String @id @map("report_document_id")
+  sellerId String @map("seller_id")
+  reportId String @unique @map("report_id")
+
+  reportType String @map("report_type")
+  processingStatus ProcessingStatus @map("processing_Status")
+  marketplaceIds String[] @map("marketplace_ids") // example: [ "ATVPDKIKX0DER", "A2EUQ1WTGCTBG2", "A2ZV50J4W1RKNI", "A2Q3Y263D00KWC",... ],
+
+  processingEndTime DateTime @map("processing_end_time")
+  dataEndTime DateTime @map("data_end_time")
+  createdTime DateTime @map("created_time")
+  processingStartTime DateTime @map("processing_start_time")
+  dataStartTime DateTime @map("data_start_time")
+}
