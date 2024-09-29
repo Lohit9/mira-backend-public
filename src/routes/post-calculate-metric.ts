@@ -10,6 +10,7 @@ import {
   timePeriodToDateRanges,
 } from "time-periods";
 import { handleCalculateFees } from 'metrics/fees'
+import { handleCalculateAverageSalesPrice } from 'metrics/average-sales-price'
 import { percentageChange } from "utils";
 
 const MONEY_FORMAT = "$0,0.00";
@@ -27,6 +28,7 @@ const parser = z.object({
     z.literal("sales_volume"),
     z.literal("order_count"),
     z.literal("total_fees"),
+    z.literal("average_sales_price"),
   ]),
 });
 
@@ -56,6 +58,10 @@ export const calculateSimpleMetric = publicRoute({ parser }, ({ body }) => {
 
   if (metric === "total_fees") {
     return handleCalculateFees(body.sellerId, period1, period2)
+  }
+
+  if (metric === "average_sales_price") {
+    return handleCalculateAverageSalesPrice(body.sellerId)
   }
 
   if (body.isComparison) {
@@ -114,7 +120,7 @@ const hackyRouteError = <E>(e: E): RouteError => {
   return { type: "Other", context: "idunno" };
 }
 
-type MetricType = "sales" | "sales_volume" | "order_count";
+type MetricType = "sales" | "sales_volume" | "order_count" | "average_sales_price";
 
 const tallyMetric = (metricType: MetricType, data: spApi.Metric[]): string => {
   if (metricType === "sales") {
